@@ -81,3 +81,22 @@
 
 ;; word count
 (map! :n [f9] (cmd! (evil-ex "w !wc -w")))
+
+;; restore s behaviour
+(after! evil-snipe (evil-snipe-mode -1))
+
+;; suppress line numbers in writeroom-mode (https://www.reddit.com/r/emacs/comments/glpl67/questions_about_writeroommode/fqz4vsc/)
+(defun dy/toggle-minor-mode (mode)
+  (if (symbol-value mode) (funcall (symbol-function mode) 0) (funcall (symbol-function mode) 1)))
+
+ (defun dy/writeroom-mode-hook ()
+  (dy/toggle-minor-mode 'hl-line-mode)
+  (dy/toggle-minor-mode 'display-line-numbers-mode))
+
+(add-hook 'writeroom-mode-hook #'dy/writeroom-mode-hook)
+
+;; don't zoom in so much in writeroom
+(setq +zen-text-scale 0.6)
+
+;; edit vimwiki files like markdown
+(add-to-list 'auto-mode-alist '("\\.wiki\\'" . markdown-mode))
