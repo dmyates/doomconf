@@ -54,35 +54,30 @@
 ;; they are implemented.
 
 ;; font
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16 :weight 'semi-light)
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14 :weight 'semi-light)
       doom-variable-pitch-font (font-spec :family "DejaVu Sans") ; inherits `doom-font''s :size
-      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 16)
-      doom-big-font (font-spec :family "DejaVu Sans Mono" :size 19))
+      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
+      doom-big-font (font-spec :family "DejaVu Sans Mono" :size 16))
 
-;; split frames
-(defun dy/split-and-go-right ()
-  "Open a new window and go to it"
-  (interactive)
-  (split-window-horizontally)
-  (evil-window-right))
+;; split windows
+(map!   :n ",w" (cmd! (split-window-horizontally) (evil-window-right 1))
+        :n ",z" (cmd! (split-window-vertically) (evil-window-down 1)))
 
-;(defadvice go-right (after advice-for-split-window-horizontally activate)
-;  (evil-window-right))
-
-(map!   :nv ",w" #'dy/split-and-go-right
-        :nv ",z" #'split-window-vertically
-        :nv "C-h" #'evil-window-left
-        :nv "C-j" #'evil-window-down
-        :nv "C-k" #'evil-window-up
-        :nv "C-l" #'evil-window-right)
-
+;; navigate windows
+(map!   :n "C-h" #'evil-window-left
+        :n "C-j" #'evil-window-down
+        :n "C-k" #'evil-window-up
+        :n "C-l" #'evil-window-right)
 
 ;; buffers
-(map!   :nv ",," 'previous-buffer
-        :nv ",." 'next-buffer)
+(map!   :n ",," 'previous-buffer
+        :n ",." 'next-buffer)
 
 ;; mouse
 (map! :n [mouse-8] 'better-jumper-jump-backward)
 
 ;; kill quit confirmation message
 (setq confirm-kill-emacs nil)
+
+;; word count
+(map! :n [f9] (cmd! (evil-ex "w !wc -w")))
